@@ -1,0 +1,20 @@
+{
+    "url": "https://e-learn.anatomy.uzh.ch/Anatomie/Anatomie.html",
+    "browser": "chrome-puppeteer",
+    "method": "spiderbot",
+    "limit": 5000,
+    "autopin": true,
+    "viewport": {
+        "width": 1920,
+        "height": 1080
+    },
+    "timestamp": "1657807000",
+    "id": "92f1db972c219900f25a551c1dfdc7d1",
+    "diffZoneCount": 0,
+    "errorCount": 0,
+    "status": "review",
+    "inQueue": 0,
+    "urlsCount": 2,
+    "startAt": 1657807000622,
+    "lastUpdate": 1657807010936
+}

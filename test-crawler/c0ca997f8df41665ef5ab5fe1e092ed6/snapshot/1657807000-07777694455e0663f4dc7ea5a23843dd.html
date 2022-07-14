@@ -1,0 +1,596 @@
+<html><head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="Topografie, Topographie, topografische Anatomie, Histologie, Allgemeine Histologie, Spezielle Histologie, Bewegungsapparat, Kopf, Hals, Thorax, Abdomen, Becken, Rumpf, Arm, Bein">
+<meta name="description" content="e-learning Programm, Darstellung der funtionellen Anatomie des Bewegungsapparats, der topographischen Anatomie und der Histologie, Atlas und interaktiver Text, multiple choice Tests">
+<meta name="Author" content="Peter Groscurth, Lutz Slomianka">
+<meta name="Publisher" content="Anatomisches Institut, Universitaet Zuerich">
+<meta name="Title" content="Anatomie">
+<meta name="Audience" content="Studenten der Humanmedizin, Studenten der Zahnmedizin, Aerzte">
+
+<title>Groscurth - Anatomie</title>
+
+<style>
+table					{ background-color: #efefef; padding: 0px; cell-spacing: 0px }
+td						{ background-color: #efefef; font-size: 10pt; color: #000000; font-family: arial; font-weight: bold }
+td.menu1				{ border-left-style: solid; border-left-width: 1px; border-left-color: #FFFFFF }
+a.menu					{ color: #000000; text-decoration: none }
+a.menu:visited			{ color: #000000; text-decoration: none }
+a.menu:hover			{ color: #FFFFFF; text-decoration: none }
+a.menu:visited:hover	{ color: #FFFFFF; text-decoration: none }
+iframe.menu				{ border-width: 0px; width: 221px; height: 500px }
+</style>
+
+<script type="text/javascript" async="" defer="" src="//webstats.uzh.ch/piwik.js"></script><script language="JavaScript" type="text/JavaScript">
+
+var colorTopographie = '#b22828' ;
+var colorHistologie = '#6280BD' ;
+var colorBewegungsapparat = '#62A39D' ;				
+var colorNeuroanatomie = '#ae662b' ;				
+var colorDeselected = '#efefef' ;			// background color deselected area
+var colorTopSelected = '#EFEFEF' ;			// text color selected area
+var colorTopDeselected = '#000000' ;		// text color deselected area
+
+// temporary storage array for seach results
+var tempArray = new Array ;
+
+// selection within main topic bewegungsapparat
+var wirbel = false ;
+var schulter = false ;
+var knie = false ;
+var hand = false ;
+var fuss = false ;
+var ellenbogen = false ;
+var huefte = false ;
+
+// selection within main topic topographie
+var kopf = false ;
+var hals = false ;
+var untereextr = false ;
+var obereextr = false ;
+var thorax = false ;
+var abdomen = false ;
+var becken = false ;
+
+// selection within main topic histologie
+var zytologie = false ;
+var allgemeine = false ;
+var spezielle = false ;
+var technik = false ;
+
+// selection of main topic
+var topographie = false ;
+var histologie = false ;
+var bewegungsapparat = false ;
+var neuroanatomie = false ;
+	
+//language version control
+var selectedLanguage = "" ;
+
+// reset main page
+function resetMains () {
+	
+	topographie = false ;
+	histologie = false ;
+	bewegungsapparat = false ;
+	neuroanatomie = false ;
+	
+	// reset storage of search results on change of main topic
+	tempArray.length = 0 ;
+	
+	// reset link colors
+	document.getElementById('histologie').style.backgroundColor = colorDeselected ;
+	document.getElementById('histologieLink').style.color = colorTopDeselected ;
+	document.getElementById('topographie').style.backgroundColor = colorDeselected ;
+	document.getElementById('topographieLink').style.color = colorTopDeselected ;
+	document.getElementById('bewegungsapparat').style.backgroundColor = colorDeselected ;
+	document.getElementById('bewegungsapparatLink').style.color = colorTopDeselected ;
+	//document.getElementById('neuroanatomie').style.backgroundColor = colorDeselected ;
+	//document.getElementById('neuroanatomieLink').style.color = colorTopDeselected ;
+	
+	// reset selection bars and other items	
+	document.getElementById('menuTable').style.display = 'none' ;
+	document.getElementById('praeptechnik').style.display = 'none' ;
+	document.getElementById('praeptechnikzelle').style.borderLeftColor = '#efefef';
+	document.getElementById('contentDiv').style.display = 'none' ;
+	document.getElementById('frontimage').style.display = 'block' ;
+	document.getElementById('neuroanatomieSelection').style.display = 'none' ;
+	document.getElementById('topographieSelection').style.display = 'none' ;
+	document.getElementById('histologieSelection').style.display = 'none' ;
+	document.getElementById('bewegungsapparatSelection').style.display = 'none' ;
+	document.getElementById('startupSelection').style.display = 'none' ;
+	
+}
+
+function setLanguage () {
+	
+	var tempLanguage = document.getElementById('lanuageSelector').value ;
+	var currentSplashImage = document.getElementById('splashimage').src ;
+
+		
+	if (tempLanguage == '_fr' && (histologie || topographie)) alert ("Le sujet sélectionné n'est pas disponible en français.") ;
+	// if (tempLanguage == '_eng' && histologie) alert ('The selected main topic is not available in your language.') ;
+	
+	// adjust menu language according to the selected language french
+	if (tempLanguage == '_fr' && !histologie && !topographie) {		
+		// request the selected language
+		selectedLanguage = document.getElementById('lanuageSelector').value ;		
+		document.getElementById('bewegungsapparatLink').innerHTML = 'Appareil locomoteur' ;
+		document.getElementById('topographieLink').innerHTML = '' ;
+		document.getElementById('histologieLink').innerHTML = '' ;	
+		document.getElementById('wirbelLink').innerHTML = 'Cr&acirc;ne-Cou-Torse' ;	
+		document.getElementById('schulterLink').innerHTML = 'Epaule' ;	
+		document.getElementById('ellenLink').innerHTML = 'Coude' ;	
+		document.getElementById('handLink').innerHTML = 'Main' ;	
+		document.getElementById('huefteLink').innerHTML = 'Hanche' ;	
+		document.getElementById('knieLink').innerHTML = 'Genou' ;	
+		document.getElementById('fussLink').innerHTML = 'Pied' ;	
+		document.getElementById('kopfLink').innerHTML = '' ;	
+		document.getElementById('halsLink').innerHTML = '' ;	
+		document.getElementById('obereextrLink').innerHTML = '' ;	
+		document.getElementById('untereextrLink').innerHTML = '' ;	
+		document.getElementById('thoraxLink').innerHTML = '' ;	
+		document.getElementById('abdomenLink').innerHTML = '' ;	
+		document.getElementById('beckenLink').innerHTML = '' ;
+		document.getElementById('searchunten').innerHTML = 'Recherche' ;
+		document.getElementById('ueberschriftunten').innerHTML = 'Anatomie' ;
+		document.getElementById('datenschutz').innerHTML = 'Protection des donn&eacute;es' ;
+		document.getElementById('helpunten').style.display = 'none' ;
+		document.getElementById('quizunten').style.display = 'none' ;		
+		document.getElementById('splashimage').src = currentSplashImage ;
+	} // selected_language _fr
+	
+	// adjust menu language according to the selected language german
+	if (tempLanguage == '') {		
+		// request the selected language
+		selectedLanguage = document.getElementById('lanuageSelector').value ;
+		//main topics
+		document.getElementById('bewegungsapparatLink').innerHTML = 'Bewegungsapparat' ;
+		document.getElementById('topographieLink').innerHTML = 'Topographische Anatomie' ;
+		document.getElementById('histologieLink').innerHTML = 'Histologie' ;
+		// subtopics Bewegungsapparat
+		document.getElementById('wirbelLink').innerHTML = 'Kopf-Hals-Rumpf' ;	
+		document.getElementById('schulterLink').innerHTML = 'Schulter' ;	
+		document.getElementById('ellenLink').innerHTML = 'Ellenbogen' ;	
+		document.getElementById('handLink').innerHTML = 'Hand' ;	
+		document.getElementById('huefteLink').innerHTML = 'H&uuml;fte' ;	
+		document.getElementById('knieLink').innerHTML = 'Knie' ;	
+		document.getElementById('fussLink').innerHTML = 'Fuss' ;
+		// subtopics Topographische Anatomie
+		document.getElementById('kopfLink').innerHTML = 'Kopf' ;	
+		document.getElementById('halsLink').innerHTML = 'Hals-Rumpf' ;	
+		document.getElementById('obereextrLink').innerHTML = 'Obere Extremit&auml;t' ;	
+		document.getElementById('untereextrLink').innerHTML = 'Untere Extremit&auml;t' ;	
+		document.getElementById('thoraxLink').innerHTML = 'Thorax' ;	
+		document.getElementById('abdomenLink').innerHTML = 'Abdomen' ;	
+		document.getElementById('beckenLink').innerHTML = 'Becken' ;
+		// subtopics Histologie
+		document.getElementById('allgemeineLink').innerHTML = 'Zytologie und Allgemeine Histologie' ;	
+		document.getElementById('spezielleLink').innerHTML = 'Spezielle Histologie' ;	
+		document.getElementById('technikLink').innerHTML = 'Histologische Technik' ;
+		// other items
+		document.getElementById('searchunten').innerHTML = 'Suche' ;
+		document.getElementById('helpunten').innerHTML = 'Hilfe' ;
+		document.getElementById('ueberschriftunten').innerHTML = 'Anatomie' ;
+		document.getElementById('datenschutz').innerHTML = 'Datenschutzerkl&auml;rung' ;		document.getElementById('impressumunten').href = "Hilfe_et_al/Impressum.html" ;
+		document.getElementById('helpunten').style.display = 'inline' ;
+		document.getElementById('quizunten').style.display = 'inline' ;
+		currentSplashImage = currentSplashImage.substring(0, currentSplashImage.indexOf('_')) ;
+		currentSplashImage = currentSplashImage + '_de.jpg' ;
+		document.getElementById('splashimage').src = currentSplashImage ; 
+	} // selectedlanguage deutsch
+	
+	// adjust menu language according to the selected language english
+	if (tempLanguage == '_eng') {
+		// request the selected language
+		selectedLanguage = document.getElementById('lanuageSelector').value ;
+		//main topics
+		document.getElementById('bewegungsapparatLink').innerHTML = 'Musculoskeletal System' ;
+		document.getElementById('topographieLink').innerHTML = 'Clinical and Topographic Anatomy' ;
+		document.getElementById('histologieLink').innerHTML = 'Histology' ;
+		// subtopics Musculoskeletal System
+		document.getElementById('wirbelLink').innerHTML = 'Head-Neck-Trunk' ;	
+		document.getElementById('schulterLink').innerHTML = 'Shoulder' ;	
+		document.getElementById('ellenLink').innerHTML = 'Elbow' ;	
+		document.getElementById('handLink').innerHTML = 'Hand' ;	
+		document.getElementById('huefteLink').innerHTML = 'Hip' ;	
+		document.getElementById('knieLink').innerHTML = 'Knee' ;	
+		document.getElementById('fussLink').innerHTML = 'Foot' ;	
+		// subtopics Clinical and Topographic Anatomy
+		document.getElementById('kopfLink').innerHTML = 'Head' ;	
+		document.getElementById('halsLink').innerHTML = 'Neck-Trunk' ;	
+		document.getElementById('obereextrLink').innerHTML = 'Upper Limb' ;	
+		document.getElementById('untereextrLink').innerHTML = 'Lower Limb' ;	
+		document.getElementById('thoraxLink').innerHTML = 'Thorax' ;	
+		document.getElementById('abdomenLink').innerHTML = 'Abdomen' ;	
+		document.getElementById('beckenLink').innerHTML = 'Pelvis' ;
+		// subtopics Histologie
+		document.getElementById('allgemeineLink').innerHTML = '' ;	
+		document.getElementById('spezielleLink').innerHTML = '' ;	
+		document.getElementById('technikLink').innerHTML = 'Histological Methods' ;
+		// other items
+		document.getElementById('searchunten').innerHTML = 'Search' ;	
+		document.getElementById('helpunten').innerHTML = 'Help' ;	
+		document.getElementById('ueberschriftunten').innerHTML = 'Anatomy' ;
+		document.getElementById('datenschutz').innerHTML = 'Privacy Policy' ;impressumunten
+		document.getElementById('impressumunten').href = "Hilfe_et_al/Impressum_eng.html" ;
+		document.getElementById('helpunten').style.display = 'inline' ;
+		document.getElementById('quizunten').style.display = 'inline' ;
+		currentSplashImage = currentSplashImage.substring(0, currentSplashImage.indexOf('_')) ;
+		currentSplashImage = currentSplashImage + '_eng.jpg' ;
+		document.getElementById('splashimage').src = currentSplashImage ; 
+	} // selectedlanguage _eng
+	
+	// show Präpariertechnik if Topographie has been selected and the language is switched to German
+	//alert (selectedLanguage + ' ' + topographie) ;
+	if ( selectedLanguage == '' && topographie ) {
+		document.getElementById('praeptechnik').style.display = 'inline' ;
+		document.getElementById('praeptechnikzelle').style.borderLeftColor = '#ffffff'
+	}
+	if ( selectedLanguage != '' && topographie ) {
+		document.getElementById('praeptechnik').style.display = 'none' ;
+		document.getElementById('praeptechnikzelle').style.borderLeftColor = '#efefef'
+	}
+
+} // end setLanguage
+	
+
+function activeNeuroanatomie () {
+
+	resetMains () ;
+	
+	neuroanatomie = true ;
+
+	// highlight active main topic
+	document.getElementById('neuroanatomie').style.backgroundColor = colorNeuroanatomie ;
+	document.getElementById('neuroanatomieLink').style.color = colorTopSelected ;
+	
+	// show selection bar for this main topic
+	document.getElementById('neuroanatomieSelection').style.display = 'block' ;
+	
+	// update context sensitive links
+	document.getElementById('ueberschriftunten').style.color = colorNeuroanatomie ;
+	document.getElementById('impressumunten').style.color = colorNeuroanatomie ;
+	document.getElementById('datenschutz').style.color = colorNeuroanatomie ;
+	document.getElementById('quizunten').style.color = colorNeuroanatomie ;
+	document.getElementById('quizunten').href = "javascript:loadContent('Neuroanatomie/neuro_Quiz/Neuroquiz.html');" ;
+	document.getElementById('helpunten').style.color = colorNeuroanatomie ;
+	document.getElementById('searchunten').style.color = colorNeuroanatomie ;
+	document.getElementById('searchunten').href = "javascript:loadContent('Neuroanatomie/neuro_HTML/weitere/suche.html');" ;		
+	document.getElementById('splashimage').src = "console/Anatomie.jpg" ;
+	
+} // end Funktionelle Anatomie
+
+
+function activeTopographie () {
+
+	resetMains () ;
+	
+	topographie = true ;
+
+	// highlight active main topic
+	document.getElementById('topographie').style.backgroundColor = colorTopographie ;
+	document.getElementById('topographieLink').style.color = colorTopSelected ;
+	
+	// show/hide selection tables for the main topic
+	if ( selectedLanguage == '' ) {
+		document.getElementById('praeptechnik').style.display = 'inline' ;
+		document.getElementById('praeptechnikzelle').style.borderLeftColor = '#ffffff'
+	}
+	document.getElementById('topographieSelection').style.display = 'block' ;
+	
+	// update context sensitive links
+	document.getElementById('ueberschriftunten').style.color = colorTopographie ;
+	document.getElementById('impressumunten').style.color = colorTopographie ;
+	document.getElementById('datenschutz').style.color = colorTopographie ;
+	document.getElementById('quizunten').style.color = colorTopographie ;
+	document.getElementById('quizunten').href = "javascript:loadContent('Topographie/topo_Quiz/topo_quiz' + selectedLanguage + '.html');" ;
+	document.getElementById('helpunten').style.color = colorTopographie ;
+	document.getElementById('searchunten').style.color = colorTopographie ;
+	document.getElementById('searchunten').href = "javascript:loadContent('Topographie/topo_HTML/weitere/suche.html');" ;
+	
+	if (selectedLanguage == '') { document.getElementById('splashimage').src = "console/Topographie_de.jpg" }
+	else { document.getElementById('splashimage').src = "console/Topographie_eng.jpg" } ;
+	
+} // end Funktionelle Anatomie
+
+
+function activeHistologie () {
+
+	resetMains() ;
+	
+	histologie = true ;
+
+	// highlight active
+	document.getElementById('histologie').style.backgroundColor = colorHistologie ;
+	document.getElementById('histologieLink').style.color = colorTopSelected ;
+
+	// show/hide selection tables
+	document.getElementById('histologieSelection').style.display = 'block' ;
+	
+	// update context sensitive links
+	document.getElementById('ueberschriftunten').style.color = colorHistologie ;
+	document.getElementById('impressumunten').style.color = colorHistologie ;
+	document.getElementById('datenschutz').style.color = colorHistologie ;
+	document.getElementById('quizunten').style.color = colorHistologie ;
+	document.getElementById('quizunten').href = "javascript:loadContent('Histologie/histo_Quiz/Histoquiz.html');" ;
+	document.getElementById('helpunten').style.color = colorHistologie ;
+	document.getElementById('searchunten').style.color = colorHistologie ;
+	document.getElementById('searchunten').href = "javascript:loadContent('Histologie/histo_HTML/weitere/suche.html');" ;
+	
+	if (selectedLanguage == '') { document.getElementById('splashimage').src = "console/Histologie_de.jpg" }
+	else { document.getElementById('splashimage').src = "console/Histologie_eng.jpg" } ;
+
+} // end activeHistologie
+
+
+function activeBewegungsapparat () {
+
+	resetMains() ;
+	
+	bewegungsapparat = true ;
+
+	// highlight active
+	document.getElementById('bewegungsapparat').style.backgroundColor = colorBewegungsapparat ;
+	document.getElementById('bewegungsapparatLink').style.color = colorTopSelected ;
+
+	// show/hide selection tables
+	document.getElementById('bewegungsapparatSelection').style.display = 'block' ;
+	
+	// update context sensitive links
+	document.getElementById('ueberschriftunten').style.color = colorBewegungsapparat ;
+	document.getElementById('impressumunten').style.color = colorBewegungsapparat ;
+	document.getElementById('datenschutz').style.color = colorBewegungsapparat ;
+	document.getElementById('quizunten').style.color = colorBewegungsapparat ;
+	document.getElementById('quizunten').href = "javascript:loadContent('Bewegungsapparat/bewapp_Quiz/bewapp_quiz' + selectedLanguage + '.html');" ;
+	document.getElementById('helpunten').style.color = colorBewegungsapparat ;
+	document.getElementById('searchunten').href = "javascript:loadContent('Bewegungsapparat/bewapp_HTML/weitere/suche.html');" ;		
+	document.getElementById('searchunten').style.color = colorBewegungsapparat ;
+
+	if (selectedLanguage == '') { document.getElementById('splashimage').src = "console/Bewegungsapparat_de.jpg" }
+	else { document.getElementById('splashimage').src = "console/Bewegungsapparat_eng.jpg" } ;
+	
+} // end activeBewegungsapparat
+
+
+
+function selectLink (linkSelected, listNumber) {
+	
+	// alert ("selectLink") ;
+
+	var linkList = [['kopf','hals', 'thorax', 'abdomen', 'becken', 'obereextr', 'untereextr' ], ['allgemeine', 'spezielle', 'technik'], [ 'wirbel', 'schulter', 'ellen', 'hand', 'huefte', 'knie', 'fuss' ], ['schnittbilder', 'toponeuro', 'systemneuro'] ] ; //  'untereextr', 
+	
+	// hide contents tables and div and display the heading and contents tables
+	document.getElementById('contentDiv').style.display = 'none' ;
+	document.getElementById('menuTable').style.display = 'block' ;
+	
+	// hide introduction image
+	document.getElementById('frontimage').style.display = 'none' ;
+	
+	// reset color and true/false status of all links
+	for ( i = 0; i < linkList[listNumber].length; i++ ) {
+		eval ( 'document.getElementById("' + linkList[listNumber][i] + 'Link").style.color = colorTopDeselected' ) ;
+		eval ( linkList[listNumber][i] + '= false' )
+	}
+	
+	// set the selected color for the selected link and mark it as 'true'
+	eval ( linkSelected + '= true' ) ;
+	eval ( 'document.getElementById("' + linkSelected + 'Link").style.color = colorTopSelected' )
+	
+	// load appropriate files into the contents table
+	if ( topographie ) {
+		eval ( 'document.getElementById("menuOne").src   =  "Topographie/topo_Menuseiten' + selectedLanguage + '/topo' + linkSelected + 'Thema1.htm"' ) ;
+		eval ( 'document.getElementById("menuTwo").src   =  "Topographie/topo_Menuseiten' + selectedLanguage + '/topo' + linkSelected + 'Thema2.htm"' ) ;
+		eval ( 'document.getElementById("menuThree").src =  "Topographie/topo_Menuseiten' + selectedLanguage + '/topo' + linkSelected + 'Thema3.htm"' ) ;
+		eval ( 'document.getElementById("menuFour").src  =  "Topographie/topo_Menuseiten' + selectedLanguage + '/topo' + linkSelected + 'Thema4.htm"' ) ;
+	}
+	if ( histologie ) {
+		eval ( 'document.getElementById("menuOne").src   =  "Histologie/histo_Menuseiten' + selectedLanguage + '/histo_' + linkSelected + '_thema1.html"' ) ;
+		eval ( 'document.getElementById("menuTwo").src   =  "Histologie/histo_Menuseiten' + selectedLanguage + '/histo_' + linkSelected + '_thema2.html"' ) ;
+		eval ( 'document.getElementById("menuThree").src =  "Histologie/histo_Menuseiten' + selectedLanguage + '/histo_' + linkSelected + '_thema3.html"' ) ;
+		eval ( 'document.getElementById("menuFour").src  =  "Histologie/histo_Menuseiten' + selectedLanguage + '/histo_' + linkSelected + '_thema4.html"' ) ;
+	}
+	if ( bewegungsapparat ) {
+		eval ( 'document.getElementById("menuOne").src   =  "Bewegungsapparat/bewapp_Menuseiten' + selectedLanguage + '/ana' + linkSelected + 'knochen.htm"' ) ;
+		eval ( 'document.getElementById("menuTwo").src   =  "Bewegungsapparat/bewapp_Menuseiten' + selectedLanguage + '/ana' + linkSelected + 'gelenke.htm"' ) ;
+		eval ( 'document.getElementById("menuThree").src =  "Bewegungsapparat/bewapp_Menuseiten' + selectedLanguage + '/ana' + linkSelected + 'muskeln.htm"' ) ;
+		eval ( 'document.getElementById("menuFour").src  =  "Bewegungsapparat/bewapp_Menuseiten' + selectedLanguage + '/ana' + linkSelected + 'ober.htm"' ) ;
+	}
+	if ( neuroanatomie ) {
+		eval ( 'document.getElementById("menuOne").src   =  "Neuroanatomie/neuro_Menuseiten/neuro_' + linkSelected + '_thema1.htm"' ) ;
+		eval ( 'document.getElementById("menuTwo").src   =  "Neuroanatomie/neuro_Menuseiten/neuro_' + linkSelected + '_thema2.htm"' ) ;
+		eval ( 'document.getElementById("menuThree").src =  "Neuroanatomie/neuro_Menuseiten/neuro_' + linkSelected + '_thema3.htm"' ) ;
+		eval ( 'document.getElementById("menuFour").src  =  "Neuroanatomie/neuro_Menuseiten/neuro_' + linkSelected + '_thema4.htm"' ) ;
+	}
+
+}
+
+function loadContent (fileName) {
+	
+	var loadFileName 	= "" ;
+	var replaceString 	= "" ;
+	
+	replaceString = "_HTML" + selectedLanguage ;
+	
+	// adjust filename to language version
+	
+	loadFileName = fileName.replace('_HTML', replaceString) ;
+	
+	// show contentDiv and hide selection tables
+	document.getElementById('frontimage').style.display = 'none' ;
+	document.getElementById('contentDiv').style.display = 'block' ;
+	document.getElementById('contentIframe').src = loadFileName ;
+	document.getElementById('menuTable').style.display = 'none' ;
+}
+
+
+</script>
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['setAPIUrl', "https://webstats.uzh.ch/"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//webstats.uzh.ch/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '304']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo -->
+
+</head>
+
+<body>
+
+
+<table style="width: 930px">
+  <tbody><tr>
+    <td id="topographie" style="width: 23%" class="menu1">
+    	&nbsp;&nbsp;<a id="topographieLink" href="#" onclick="activeTopographie();" class="menu">Topographische Anatomie</a></td>
+    <td id="bewegungsapparat" style="width: 23%" class="menu1">
+    	&nbsp;&nbsp;<a id="bewegungsapparatLink" href="#" onclick="activeBewegungsapparat();" class="menu">Bewegungsapparat</a></td>
+    <td id="histologie" style="width: 23%" class="menu1">
+    	&nbsp;&nbsp;<a id="histologieLink" href="#" onclick="activeHistologie();" class="menu">Histologie</a></td>
+    <td class="menu1" id="neuroanatomie" style="width: 23%; text-align: right">
+		<select id="lanuageSelector" name="language_Select" style="font-size: 10pt; font-weight: bold; color: #000000" onchange="setLanguage()">
+        <option value="">Deutsch</option>
+        <option value="_eng">English</option>
+        <option value="_fr">Francais</option>
+      </select>
+      </td>
+  </tr>
+</tbody></table>
+
+
+<!-- Selection of topics Bewegungsapparat -->
+<table id="bewegungsapparatSelection" style="width: 930px; display: none;">
+  <tbody><tr>
+   	<td id="kopf" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="wirbelLink" onclick="selectLink('wirbel',2);" class="menu">Kopf-Hals-Rumpf</a></td>
+    <td id="hals" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="schulterLink" onclick="selectLink('schulter',2);" class="menu">Schulter</a></td>
+    <td id="obereextr" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="ellenLink" onclick="selectLink('ellen',2);" class="menu">Ellbogen</a></td>
+    <td id="thorax" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="handLink" onclick="selectLink('hand',2);" class="menu">Hand</a></td>
+    <td id="abdomen" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="huefteLink" onclick="selectLink('huefte',2);" class="menu">Hüfte</a></td>
+    <td id="becken" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="knieLink" onclick="selectLink('knie',2);" class="menu">Knie</a></td>
+    <td id="becken" style="width: 130px; background-color:#62A39D" class="menu1">&nbsp;&nbsp;<a href="#" id="fussLink" onclick="selectLink('fuss',2);" class="menu">Fuss</a></td>
+  </tr>
+</tbody></table>
+
+
+<!-- Selection of topics Topographie -->
+<table id="topographieSelection" style="width: 930px; display: none;">
+  <tbody><tr>
+   	<td id="kopf" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="kopfLink" onclick="selectLink('kopf',0);" class="menu">Kopf</a></td>
+    <td id="hals" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="halsLink" onclick="selectLink('hals',0);" class="menu">Hals-Rumpf</a></td>
+    <td id="obereextr" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="obereextrLink" onclick="selectLink('obereextr',0);" class="menu">Obere Extremität</a></td>
+    <td id="untereextr" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="untereextrLink" onclick="selectLink('untereextr',0);" class="menu">Untere Extremität</a></td>
+    <td id="thorax" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="thoraxLink" onclick="selectLink('thorax',0);" class="menu">Thorax</a></td>
+    <td id="abdomen" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="abdomenLink" onclick="selectLink('abdomen',0);" class="menu">Abdomen</a></td>
+    <td id="becken" style="width: 130px; background-color:#b22828" class="menu1">&nbsp;&nbsp;<a href="#" id="beckenLink" onclick="selectLink('becken',0);" class="menu">Becken</a></td> 
+  </tr>
+</tbody></table>
+
+
+<!-- Selection of topics Histologie -->
+<table id="histologieSelection" style="width: 930px; display: none;">
+  <tbody><tr>
+    <td id="Allgemeine_Histologie" style="width: 308px; background-color:#6280BD" class="menu1">&nbsp;&nbsp;<a href="#" id="allgemeineLink" onclick="selectLink('allgemeine',1);" class="menu">Zytologie und Allgemeine Histologie</a></td>
+    <td id="Spezielle_Histologie" style="width: 308px; background-color:#6280BD" class="menu1">&nbsp;&nbsp;<a href="#" id="spezielleLink" onclick="selectLink('spezielle',1);" class="menu">Spezielle Histologie</a></td>
+    <td id="histotechnik" style="width: 309px; background-color:#6280BD" class="menu1">&nbsp;&nbsp;<a href="#" id="technikLink" onclick="selectLink('technik',1);" class="menu">Histologische Technik</a></td>
+  </tr>
+</tbody></table>
+
+
+<!-- Selection of topics Neuroanatomie -->
+<table id="neuroanatomieSelection" style="width: 930px; display: none;">
+  <tbody><tr>
+    <td id="schnittbilder" style="width: 308px; background-color:#ae662b" class="menu1">&nbsp;&nbsp;<a href="#" id="schnittbilderLink" onclick="selectLink('schnittbilder',3);" class="menu">Schnittbilder</a></td>
+    <td id="toponeuro" style="width: 308px; background-color:#ae662b" class="menu1"><a href="#" id="toponeuroLink" onclick="selectLink('toponeuro',3);" class="menu">&nbsp;&nbsp;Topographische Neuroanatomie</a></td>
+    <td id="systemneuro" style="width: 309px; background-color:#ae662b" class="menu1">&nbsp;&nbsp;<a href="#" id="systemneuroLink" onclick="selectLink('systemneuro',3);" class="menu">Systematische Neuroanatomie</a></td>
+  </tr>
+</tbody></table>
+
+
+<!-- Selection of topics Startup -->
+<table id="startupSelection" style="width: 930px; display: block">
+  <tbody><tr>
+    <td>&nbsp;</td>
+  </tr>
+</tbody></table>
+
+
+<table id="menuTable" style="width: 930px; height: 520px; display: none;">
+  <tbody><tr>
+    <td><iframe id="menuOne" class="menu" frameborder="0"></iframe></td>
+    <td><iframe id="menuTwo" class="menu" frameborder="0"></iframe></td>
+    <td><iframe id="menuThree" class="menu" frameborder="0"></iframe></td>
+    <td><iframe id="menuFour" class="menu" frameborder="0"></iframe></td>
+  </tr>
+</tbody></table>
+
+<div id="frontimage" style="padding: 0px; display: block">
+<img id="splashimage" src="console/Anatomie_de.jpg" width="930" height="520" border="0"></div>
+
+<div id="contentDiv" style="width: 930px; height: 520px; padding: 0px; background-color: rgb(220, 220, 220); display: none;">
+<iframe id="contentIframe" name="contentIframe" frameborder="no" scrolling="no" src="" width="930" height="520"></iframe>
+</div>
+
+<div id="InfoDiv" style="position: absolute; left: 200px; top: 100px; width: 400px; padding: 15px; height: 280px; background-color: #ffffff; border-style: solid; border-width: 2px; border-color: #FF0000; display: none; font-size: 10pt; color: #000000; font-family: arial">
+  <p style="font-weight: bold">Aktualisierung</p>
+  <p>Wir werden die Seiten heute zwischen 14.00 Uhr und 15 Uhr aktualisieren. In dieser Periode sind die Seiten für einige Minuten nicht zugänglich.</p>
+  <p>Wir danken für Ihr Verständnis.</p>
+  <p><a href="#" onclick="javascript: document.getElementById('InfoDiv').style.display = 'none' ;">Fenster schliessen</a></p>
+</div>
+
+<div id="permalinks">
+<table style="width: 930px">
+  <tbody><tr>
+    <td style="width: 130px">&nbsp;&nbsp;<span id="ueberschriftunten" style="font-size: 12pt">Anatomie</span></td>
+    <td style="width: 90px" class="menu1">&nbsp;<a href="Hilfe_et_al/Impressum.html" class="menu" id="impressumunten" target="contentIframe">Impressum</a></td>
+    <td style="width: 225px" class="menu1">&nbsp;<a href="http://www.uzh.ch/de/privacy" class="menu" id="datenschutz" target="_blank">Datenschutzerklärung</a></td>
+    <td style="width: 135px; border-left-color: rgb(239, 239, 239);" class="menu1" id="praeptechnikzelle">&nbsp;<a href="Topographie/topo_Film/Praepariertechnik.html" class="menu" id="praeptechnik" target="contentIframe" style="display: none; color: #b22828"><img src="console/movie.gif" width="17" height="13">&nbsp;Präpariertechnik</a></td>
+    <td style="width: 80px" class="menu1">&nbsp;<a href="javascript:loadContent('console/NoSelection.html');" class="menu" id="searchunten">Suche</a></td>
+    <td style="width: 80px" class="menu1">&nbsp;<a href="javascript:loadContent('console/NoSelection.html');" class="menu" id="quizunten" style="display:inline">Quiz</a></td>
+    <td style="width: 80px" class="menu1">&nbsp;<a href="javascript:loadContent('Hilfe_et_al/Hilfe/hilfe_HTML/help_00.html');" class="menu" id="helpunten" style="display:inline">Hilfe</a></td>
+  </tr>
+</tbody></table>
+</div>
+
+<script type="text/javascript">
+
+	var selfLocation = eval ( '"' + self.location + '"' ) ;
+	
+	document.getElementById('menuTable').style.display =  'none' ;
+	document.getElementById('contentDiv').style.display = 'none' ;
+	document.getElementById('neuroanatomieSelection').style.display = 'none' ;
+	document.getElementById('histologieSelection').style.display = 'none' ;
+	document.getElementById('topographieSelection').style.display = 'none' ;
+	document.getElementById('neuroanatomieSelection').style.display = 'none' ;
+	document.getElementById('bewegungsapparatSelection').style.display = 'none' ;
+	document.getElementById('praeptechnikzelle').style.borderLeftColor = '#efefef';
+	
+	// set the default language to german on loading of the page
+	document.getElementById('lanuageSelector').selectedIndex = "0" ;
+	
+	// activate the course that is requested by the extension of the link
+	if ( selfLocation.indexOf('?') != -1 && selfLocation.indexOf('Bewegungsapparat') != -1 ) { activeBewegungsapparat () } ;
+	if ( selfLocation.indexOf('?') != -1 && selfLocation.indexOf('Topographie') != -1 ) { activeTopographie () } ;
+	if ( selfLocation.indexOf('?') != -1 && selfLocation.indexOf('Histologie') != -1 ) { activeHistologie () } ;
+	if ( selfLocation.indexOf('?') != -1 && selfLocation.indexOf('Neuroanatomie') != -1 ) { activeHistologie () } ;
+	
+	// load the content that is requested by the extension of the link
+	if ( selfLocation.indexOf('?') != -1 ) {
+		selfLocation = selfLocation.slice(selfLocation.indexOf("?") + 1 ) ;
+		if ( selfLocation.indexOf('.htm') != -1 ) loadContent(selfLocation);
+	}
+	
+
+</script>
+
+
+
+</body></html>
