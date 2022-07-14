@@ -1,0 +1,15 @@
+{
+    "id": "c0ca997f8df41665ef5ab5fe1e092ed6",
+    "name": "Groscurth",
+    "crawlerInput": {
+        "url": "https://e-learn.anatomy.uzh.ch/Anatomie/Anatomie.html",
+        "browser": "chrome-puppeteer",
+        "method": "spiderbot",
+        "limit": 5000,
+        "autopin": true,
+        "viewport": {
+            "width": 1920,
+            "height": 1080
+        }
+    }
+}
